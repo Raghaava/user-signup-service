@@ -1,4 +1,4 @@
-package com.example.auth.service.exception;
+package com.example.auth.exception;
 
 public class UserServiceException extends RuntimeException {
     public UserServiceException(String message) {

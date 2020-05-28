@@ -5,6 +5,10 @@ server:
   error:
     include-stacktrace: NEVER
 
+logging:
+  level:
+    root: debug
+
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/photo_app2?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
