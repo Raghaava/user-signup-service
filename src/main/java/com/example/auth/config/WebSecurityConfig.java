@@ -1,12 +1,14 @@
 package com.example.auth.config;
 
 import com.example.auth.security.filter.AuthenticationFilter;
+import com.example.auth.security.filter.AuthorizationFilter;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -26,8 +28,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/users")
                 .permitAll()
+                .antMatchers(HttpMethod.GET, "/password-reset.html**")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/users/email-verification")
+                .permitAll()
+                .antMatchers(HttpMethod.POST, "/users/password-reset-request")
+                .permitAll()
+                .antMatchers(HttpMethod.POST, "/users/password-reset")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
                 .and()
-                .addFilter(authenticationFilter());
+                .addFilter(authenticationFilter())
+                .addFilter(new AuthorizationFilter(authenticationManager()))
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.NEVER);
     }
 
     @Override
